@@ -10,8 +10,12 @@ import (
 
 func Register(c *fiber.Ctx) error {
 	var input model.RegisterInput
+	input.Init()
 	if err := c.BodyParser(&input); err != nil {
 		log.Println(err.Error())
+		return ErrorWithMessage(c, constant.CODE_100, constant.GetCodeText(constant.CODE_100))
+	}
+	if input.Username == "guest" || input.Password == "000000" || input.Email == "guest@email.com" {
 		return ErrorWithMessage(c, constant.CODE_100, constant.GetCodeText(constant.CODE_100))
 	}
 	e := service.Register(&input)
@@ -30,6 +34,9 @@ func Login(c *fiber.Ctx) error {
 	if err := c.BodyParser(&input); err != nil {
 		log.Println(err.Error())
 		return ErrorWithMessage(c, constant.CODE_100, constant.GetCodeText(constant.CODE_100))
+	}
+	if input.Password == "" {
+		return ErrorWithMessage(c, constant.CODE_205, constant.GetCodeText(constant.CODE_205))
 	}
 	token, e := service.Login(&input)
 	if e != nil {
