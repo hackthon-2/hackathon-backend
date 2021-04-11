@@ -1,18 +1,18 @@
 ## 项目开发规范  (暂定)
 
 #### 项目结构 ####
-config  程序的配置项读取函数
-constant  管理程序中出现的一些常量，各种响应码
-**database  持久层逻辑**
-**service  业务层逻辑**
-**handler  控制页面输出的处理器**
-docs  接口相关文档
-**middleware  中间件**
-**model  各种模型建模**
-**router  管理分路由**
-**util  各种工具函数**
+config  程序的配置项读取函数  
+constant  管理程序中出现的一些常量，各种响应码  
+**database  持久层逻辑**  
+**service  业务层逻辑**  
+**handler  控制页面输出的处理器**  
+docs  接口相关文档  
+**middleware  中间件**  
+**model  各种模型建模**  
+**router  管理分路由**  
+**util  各种工具函数**  
 static  放在api主页好玩的web页面罢了  
-.env  程序的配置项，比如数据库账号密码  
+.env  程序的配置项，比如数据库账号密码   
 main.go  程序的主入口  
 
 **注：粗体是程序的重要组成部分**  
