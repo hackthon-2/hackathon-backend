@@ -3,6 +3,7 @@ package router
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"hackthon/middleware"
 )
 
 func Init(app *fiber.App){
@@ -10,7 +11,6 @@ func Init(app *fiber.App){
 	api.Static("/","./static")
 	auth:=api.Group("/auth")
 	authInit(auth)
-	/*
-	TODO:搞个auth.go把auth的路由信息在authInit中初始化
-	 */
+	user:=api.Group("/user",middleware.TokenVerify)
+	userInit(user)
 }

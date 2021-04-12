@@ -2,12 +2,14 @@ package util
 
 import (
 	"crypto/rsa"
+	"encoding/base64"
 	"errors"
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 	"io/ioutil"
 	"log"
 	"reflect"
+	"strconv"
 	"time"
 )
 
@@ -102,6 +104,7 @@ func (j *JWT) RefreshToken(tokenString string, t time.Duration) (string, error) 
 	}
 	return "", TokenInvalid
 }
+
 /*
 StructAssign
 binding type interface 要修改的结构体
@@ -122,11 +125,17 @@ func StructAssign(binding interface{}, value interface{}) {
 }
 
 func HashPassword(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 4)
 	return string(bytes), err
 }
 
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
+}
+
+func GenerateCode() string {
+	input := []byte(strconv.FormatInt(time.Now().Unix(), 10))
+	code := base64.URLEncoding.EncodeToString(input)
+	return code
 }

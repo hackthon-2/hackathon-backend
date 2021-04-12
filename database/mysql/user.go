@@ -25,6 +25,13 @@ func FindUserByUsername(username string) (model.User, int64, error) {
 	return user, result.RowsAffected, result.Error
 }
 
+// FindUserByEmail 根据邮箱地址查找用户信息
+func FindUserByEmail(email string) ([]model.User, error) {
+	var user []model.User
+	result := database.DB().Table("user").Where("email=?", email).Find(&user)
+	return user, result.Error
+}
+
 // UpdateUserById 更新用户信息，比如密码和头像，还有用户名,性别,电子邮箱
 func UpdateUserById(id uint, user *model.User) (int64, error) {
 	result := database.DB().Table("user").Where(model.User{ID: id}).Updates(user)

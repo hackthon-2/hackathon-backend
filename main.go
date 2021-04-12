@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"hackthon/config"
 	"hackthon/database"
 	"hackthon/router"
@@ -16,7 +17,7 @@ func main(){
 	})
 	database.ConnectDB()
 	database.ConnectRedis()
-	app.Use(cors.New())
+	app.Use(cors.New(),recover.New())
 	router.Init(app)
 	defer database.DisconnectDB()
 	defer database.DisconnectRedis()
