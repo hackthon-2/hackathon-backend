@@ -4,7 +4,7 @@ type ResponseCode int
 
 const (
 	CODE_100 ResponseCode = 100 //参数错误
-	CODE_101 ResponseCode = 101 //无效token
+	CODE_101 ResponseCode = 101 //请求未携带token
 	CODE_102 ResponseCode = 102 //token过期
 	CODE_103 ResponseCode = 103 //token刷新失败
 	CODE_104 ResponseCode = 104 //token错误
@@ -21,7 +21,7 @@ const (
 
 var codeTextMap = map[ResponseCode]string{
 	CODE_100: "参数错误",
-	CODE_101: "无效token",
+	CODE_101: "请求未携带token",
 	CODE_102: "token过期",
 	CODE_103: "刷新token失败",
 	CODE_104: "token错误",

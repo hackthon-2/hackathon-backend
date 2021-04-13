@@ -23,7 +23,7 @@ func ConnectDB() {
 	newLogger := logger.New(log.New(os.Stdout, "\r\n", log.LstdFlags),
 		logger.Config{
 			SlowThreshold: time.Second,
-			LogLevel:      logger.Info,
+			LogLevel:      logger.Silent,
 			Colorful:      true,
 		})
 	mysqlConfig := gorm.Config{
@@ -62,7 +62,7 @@ func ConnectDB() {
 	sqlDB.SetConnMaxIdleTime(time.Hour)
 	//设置连接最大存活时间
 	sqlDB.SetConnMaxLifetime(2 * time.Hour)
-	err = db.AutoMigrate(&model.User{}, &model.Diary{}, &model.Todo{}, &model.Watch{})
+	err = db.AutoMigrate(&model.User{})
 	if err != nil {
 		log.Fatal(err.Error())
 	}
