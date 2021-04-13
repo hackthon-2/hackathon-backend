@@ -73,7 +73,7 @@ func Login(input *model.LoginInput) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	err = database2.CreateTokenCache(user.Username,token)
+	err = database2.CreateTokenCache(user.Username, token)
 	if err != nil {
 		return "", err
 	}
@@ -85,7 +85,7 @@ func SendCode(input *model.FindPasswdInput) error {
 	config := util.Mail{}
 	username := os.Getenv("SMTP_USERNAME")
 	passwd := os.Getenv("SMTP_PASSWD")
-	config.SetMsg("smtp.qq.com", "465", username, passwd)
+	config.SetMsg("smtp.mail.yahoo.com", "465", username, passwd)
 	//一个邮箱可能有多个用户名，要在验证code之后通过邮箱加载要选择的用户名进行密码重置
 	data, err := database.FindUserByEmail(input.Email)
 	if err != nil {
