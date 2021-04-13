@@ -13,12 +13,19 @@ import (
 
 func TokenVerify(c *fiber.Ctx) error {
 	value := c.Get("Authorization")
+	if value == "" {
+		return handler.ErrorWithMessage(c, constant.CODE_100, constant.GetCodeText(constant.CODE_100))
+	}
 	data := strings.Split(value, " ")
 	if data[1] == "" {
 		return handler.ErrorWithMessage(c, constant.CODE_100, constant.GetCodeText(constant.CODE_100))
 	}
 	token := data[1]
 	log.Println("get token: " + token)
+	_, err := database2.FindTokenCache(token, time.Hour*4)
+	if err != nil {
+		return handler.ErrorWithMessage(c, constant.CODE_101, constant.GetCodeText(constant.CODE_101))
+	}
 	j := util.NewJWT()
 	claim, err := j.ParserToken(token)
 	if err != nil {
@@ -36,6 +43,9 @@ func TokenVerify(c *fiber.Ctx) error {
 			if er != nil {
 				return handler.ErrorWithMessage(c, constant.CODE_103, constant.GetCodeText(constant.CODE_103))
 			}
+		}
+		if err == util.TokenMalformed {
+			return handler.ErrorWithMessage(c, constant.CODE_104, constant.GetCodeText(constant.CODE_104))
 		}
 	}
 	c.Locals("claim", claim)
