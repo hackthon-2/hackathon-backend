@@ -15,6 +15,10 @@ const (
 	CODE_204 ResponseCode = 204 //用户名不存在
 	CODE_205 ResponseCode = 205 //密码为空
 	CODE_206 ResponseCode = 206 //无权限访问
+	CODE_207 ResponseCode = 207 //获取数据失败
+	CODE_301 ResponseCode = 301 //创建日记失败
+	CODE_302 ResponseCode = 302 //更新日记失败
+	CODE_303 ResponseCode = 303 //删除日记失败
 	CODE_404 ResponseCode = 404 //页面未找到
 	CODE_500 ResponseCode = 500 //服务器错误
 )
@@ -32,6 +36,10 @@ var codeTextMap = map[ResponseCode]string{
 	CODE_204: "用户名不存在",
 	CODE_205: "密码不能为空",
 	CODE_206: "无权限访问",
+	CODE_207: "获取数据失败",
+	CODE_301: "创建日记失败",
+	CODE_302: "更新日记失败",
+	CODE_303: "删除日记失败",
 	CODE_404: "页面不存在",
 	CODE_500: "服务器内部错误",
 }

@@ -24,10 +24,27 @@ func FindDiaryById(id uint) (model.Diary, int64, error) {
 	return diary, result.RowsAffected, result.Error
 }
 
+// FindDiaryByUserIDAndQuestionAndTime 根据用户名，问题和日期查找日记(不一定用得上)
+func FindDiaryByUserIDAndQuestionAndTime(userID uint, question, date string) (model.Diary, int64, error) {
+	var diary model.Diary
+	result := database.DB().Table("diary").Where("user_id=? AND time=? AND question=?", userID, date, question).First(&diary)
+	return diary, result.RowsAffected, result.Error
+}
+
 // ListDiaryByTime 根据时间和userId查询diary
 func ListDiaryByTime(userId uint, time string) ([]model.Diary, error) {
 	var diary []model.Diary
 	result := database.DB().Table("diary").Where("user_id=? AND time=?", userId, time).Find(&diary)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	//把日期的序列化格式改成YYYY-MM-DD
+	for i, v := range diary {
+		diary[i].Time = v.Time[:10]
+	}
 	return diary, result.Error
 }
 
+func DeleteDiary(diaryID uint) error {
+	return database.DB().Delete(&model.Diary{}, diaryID).Error
+}

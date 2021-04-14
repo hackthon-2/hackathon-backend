@@ -11,9 +11,10 @@ type User struct {
 // Diary 日记数据
 type Diary struct {
 	ID       uint   `json:"id" gorm:"primaryKey;<-:create;type:INT UNSIGNED not NULL auto_increment"`
+	//用户ID，通过tokenVerify后的claim中获得
 	UserID   uint   `json:"user_id" gorm:"<-:create;type:INT UNSIGNED not NULL;index:idx_userId,type:btree"`
 	Question string `json:"question" gorm:"<-;type:VARCHAR(100) not NULL;collate:utf8mb4_unicode_ci;index:idx_question,type:btree,length:100"`
-	Text     string `json:"text" gorm:"<-;type:TEXT;collate:utf8mb4_unicode_ci;index:idx_text,type:btree,length:400"`
+	Text     string `json:"text" gorm:"<-;type:TEXT not NULL;collate:utf8mb4_unicode_ci;index:idx_text,type:btree,length:400"`
 	Time     string `json:"time" gorm:"<-;type:DATE not NULL;collate:utf8mb4_unicode_ci;index:idx_time,type:btree,sort:desc"`
 }
 
@@ -21,8 +22,8 @@ type Diary struct {
 type Todo struct {
 	ID     uint   `gorm:"primaryKey;<-:create;type:INT UNSIGNED not NULL auto_increment"`
 	UserID uint   `gorm:"<-:create;type:INT UNSIGNED not NULL;index:idx_userId,type:btree"`
-	Todo   string `gorm:"<-;type:TEXT;collate:utf8mb4_unicode_ci;index:idx_todo,type:btree,length:300"`
-	Done   string `gorm:"<-;type:TEXT;collate:utf8mb4_unicode_ci;index:idx_todo,type:btree,length:300"`
+	Todo   string `gorm:"<-;type:TEXT not NULL;collate:utf8mb4_unicode_ci;index:idx_todo,type:btree,length:300"`
+	Done   string `gorm:"<-;type:TEXT not NULL;collate:utf8mb4_unicode_ci;index:idx_todo,type:btree,length:300"`
 	Time   string `gorm:"<-;type:DATE not NULL;collate:utf8mb4_unicode_ci;index:idx_time,type:btree,sort:desc"`
 }
 
