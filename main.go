@@ -10,14 +10,14 @@ import (
 	"log"
 )
 
-func main(){
+func main() {
 	config.Config()
-	app:=fiber.New(fiber.Config{
+	app := fiber.New(fiber.Config{
 		Prefork: true,
 	})
 	database.ConnectDB()
 	database.ConnectRedis()
-	app.Use(cors.New(),recover.New())
+	app.Use(cors.New(), recover.New())
 	router.Init(app)
 	defer database.DisconnectDB()
 	defer database.DisconnectRedis()

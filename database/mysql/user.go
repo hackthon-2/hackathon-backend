@@ -32,7 +32,7 @@ func FindUserByEmail(email string) ([]model.User, error) {
 	return user, result.Error
 }
 
-// UpdateUserById 更新用户信息，比如密码和头像，还有用户名,性别,电子邮箱
+// UpdateUserById 更新用户信息，比如密码和头像，还有用户名,电子邮箱
 func UpdateUserById(id uint, user *model.User) (int64, error) {
 	result := database.DB().Table("user").Where(model.User{ID: id}).Updates(user)
 	return result.RowsAffected, result.Error
