@@ -22,6 +22,7 @@ func CreateDiaryCache(diary *[]model.Diary) error {
 		return err
 	}
 	conn, ctx := database.Redis()
+	defer conn.Close()
 	//设置缓存，正常返回码是如果建立新的则返回1，替换旧的则返回0，所以这里只看有没有错误
 	err = conn.HSet(ctx, "USER_"+strconv.Itoa(int((*diary)[0].UserID)), (*diary)[0].Time, string(val)).Err()
 	if err != nil {
@@ -34,6 +35,7 @@ func CreateDiaryCache(diary *[]model.Diary) error {
 // FindDiaryCache 查找缓存，缓存是一个hashTable,可以根据日期存缓存字段
 func FindDiaryCache(userId uint, date string) (string, error) {
 	conn, ctx := database.Redis()
+	defer conn.Close()
 	//先找缓存是否存在
 	data, err := conn.HGet(ctx, "USER_"+strconv.Itoa(int(userId)), date).Result()
 	//如果出现错误就直接返回错误
