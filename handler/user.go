@@ -181,3 +181,18 @@ func DeleteTodo(c *fiber.Ctx) error {
 	}
 	return SuccessWithMessage(c, "请求成功", [0]int{})
 }
+
+func Statistics(c *fiber.Ctx) error {
+	claim := c.Locals("claim").(*util.Claims)
+	time := c.Query("time", time2.Now().Add(-time2.Hour*168).Format("2006-01-02"))
+	data, err := service.Statistics(claim.Id, time)
+	if err != nil {
+		if err == service.GenerateStatisticsError {
+			log.Println(err.Error())
+			return ErrorWithMessage(c, constant.CODE_307, constant.GetCodeText(constant.CODE_307))
+		}
+		log.Println(err.Error())
+		return StatusServerErrorWithMessage(c, err.Error())
+	}
+	return SuccessWithMessage(c, "获取成功", data)
+}

@@ -22,6 +22,7 @@ const (
 	CODE_304 ResponseCode = 304 //创建待办失败
 	CODE_305 ResponseCode = 305 //更新待办失败
 	CODE_306 ResponseCode = 306 //删除待办失败
+	CODE_307 ResponseCode = 307 //获取统计数据失败
 	CODE_404 ResponseCode = 404 //页面未找到
 	CODE_500 ResponseCode = 500 //服务器错误
 )
@@ -46,6 +47,7 @@ var codeTextMap = map[ResponseCode]string{
 	CODE_304: "创建待办失败",
 	CODE_305: "更新待办失败",
 	CODE_306: "删除待办失败",
+	CODE_307: "获取统计数据失败",
 	CODE_404: "页面不存在",
 	CODE_500: "服务器内部错误",
 }
