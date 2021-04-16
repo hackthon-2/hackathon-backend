@@ -5,7 +5,7 @@ type User struct {
 	Username string `json:"username" gorm:"<-;type:VARCHAR(30) not NULL;collate:utf8mb4_unicode_ci;unique;index:idx_name,unique,type:btree,length:30"`
 	Password string `json:"password" gorm:"<-;type:VARCHAR(100) not NULL"`
 	Email    string `json:"email" gorm:"<-;type:VARCHAR(100) not NULL;collate:utf8mb4_unicode_ci;index:idx_email,type:btree,length:100"`
-	Avatar   string `json:"avatar" gorm:"<-;type:VARCHAR(256) not NULL;collate:utf8mb4_unicode_ci;index:idx_avatar,type:btree,length:200;default:https://tieba-simulating.oss-cn-hangzhou.aliyuncs.com/avatar/default.jpg"`
+	Avatar   string `json:"avatar" gorm:"<-;type:VARCHAR(256) not NULL;collate:utf8mb4_unicode_ci;index:idx_avatar,type:btree,length:200;default:https://oss.onesnowwarrior.cn/avatars/default.jpg"`
 }
 
 // Diary 日记数据

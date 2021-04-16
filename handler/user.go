@@ -11,6 +11,38 @@ import (
 	time2 "time"
 )
 
+func UpdateProfile(c *fiber.Ctx) error {
+	claim := c.Locals("claim").(*util.Claims)
+	var input model.UpdateUserInput
+	if err := c.BodyParser(&input); err != nil {
+		log.Println(err.Error())
+		return ErrorWithMessage(c, constant.CODE_100, constant.GetCodeText(constant.CODE_100))
+	}
+	err := service.UpdateProfile(claim.Id, &input)
+	if err != nil {
+		if err == service.UpdateProfileError {
+			log.Println(err.Error())
+			return ErrorWithMessage(c, constant.CODE_402, constant.GetCodeText(constant.CODE_402))
+		}
+		log.Println(err.Error())
+		return StatusServerErrorWithMessage(c, err.Error())
+	}
+	return SuccessWithMessage(c, "请求成功", [0]int{})
+}
+func ListProfile(c *fiber.Ctx) error {
+	claim := c.Locals("claim").(*util.Claims)
+	user, err := service.ListProfile(claim.Id)
+	if err != nil {
+		if err == service.ListProfileError {
+			log.Println(err.Error())
+			return ErrorWithMessage(c, constant.CODE_403, constant.GetCodeText(constant.CODE_403))
+		}
+		log.Println(err.Error())
+		return StatusServerErrorWithMessage(c, err.Error())
+	}
+	return SuccessWithMessage(c, "获取成功", user)
+}
+
 // CreateDiary POST方式
 func CreateDiary(c *fiber.Ctx) error {
 	claim := c.Locals("claim").(*util.Claims)
