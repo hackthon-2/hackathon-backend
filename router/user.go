@@ -14,4 +14,9 @@ func userInit(user fiber.Router) {
 	user.Post("/diaryUpdate", handler.UpdateDiary)
 	user.Get("/diaryList", handler.ListDiary)
 	user.Delete("/diaryDeletion", handler.DeleteDiary)
+	user.Post("/todoCreation", handler.CreateTodo)
+	user.Post("/todoUpdate", handler.UpdateTodo)
+	user.Get("/todoList", handler.ListTodo)
+	user.Delete("/todoDeletion", handler.DeleteTodo)
+	user.Get("/statistics", handler.Statistics)
 }
