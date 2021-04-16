@@ -25,7 +25,7 @@ type Todo struct {
 	Header string `gorm:"<-;type:VARCHAR(100) not NULL;collate:utf8mb4_unicode_ci;index:idx_header,type:btree,length:100"`
 	//这个存json到数据库里面，多个todoItem用/隔开，提取出来用split出[]string，然后遍历Unmarshal成[]ToDoItem
 	TodoItem string `gorm:"<-;type:TEXT not NULL;collate:utf8mb4_unicode_ci;index:idx_todoItems,type:btree,length:450"`
-	Time      string `gorm:"<-;type:DATE not NULL;collate:utf8mb4_unicode_ci;index:idx_time,type:btree,sort:desc"`
+	Time     string `gorm:"<-;type:DATE not NULL;collate:utf8mb4_unicode_ci;index:idx_time,type:btree,sort:desc"`
 }
 
 // Watch 监督的内容，待办
@@ -36,5 +36,6 @@ type Watch struct {
 	UserID       uint   `gorm:"<-:create;type:INT UNSIGNED not NULL;index:idx_userId,type:btree"`
 	Time         uint   `gorm:"<-:create;type:TINYINT UNSIGNED not NULL;index:idx_time,type:btree"`
 	FinishedTime uint   `gorm:"<-;type:TINYINT UNSIGNED not NULL;index:idx_finishedTime,type:btree"`
+	WatcherID    uint   `gorm:"<-:create;type:INT UNSIGNED not NULL;index:idx_watcherId,type:btree"`
 	Watcher      string `gorm:"<-:create;collate:utf8mb4_unicode_ci;type:VARCHAR(30) not NULL;unique;index:idx_watcher,type:btree,length:30"`
 }

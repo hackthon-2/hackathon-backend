@@ -2,8 +2,11 @@ package util
 
 import (
 	"crypto/rsa"
+	"crypto/sha256"
 	"encoding/base64"
+	"encoding/hex"
 	"errors"
+	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 	"io/ioutil"
@@ -28,6 +31,17 @@ type Claims struct {
 	Id       uint
 	Username string
 	jwt.StandardClaims
+}
+type OSSConfig struct {
+	BucketName      string
+	EndPoint        string
+	AccessKeyId     string
+	AccessKeySecret string
+}
+type StsToken struct {
+	SecurityToken   string
+	AccessKeyId     string
+	AccessKeySecret string
 }
 
 // NewJWT 新建一个JWT的结构体对象，并把读取的公私钥信息进行反序列化供程序使用
@@ -124,6 +138,24 @@ func StructAssign(binding interface{}, value interface{}) {
 	}
 }
 
+func (c *OSSConfig) GetOSSBucket() (*oss.Bucket, error) {
+	client, err := oss.New(c.EndPoint, c.AccessKeyId, c.AccessKeySecret)
+	if err != nil {
+		return nil, err
+	}
+	bucket, err := client.Bucket(c.BucketName)
+	return bucket, err
+}
+
+func FileNameHash(fileName string) string{
+	timeStamp:=strconv.FormatInt(time.Now().Unix(),10)
+	hash := sha256.New()
+	hash.Write([]byte(fileName))
+	hash.Write([]byte(timeStamp))
+	val:=hash.Sum(nil)
+	hashString:=hex.EncodeToString(val)
+	return hashString
+}
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 4)
 	return string(bytes), err
