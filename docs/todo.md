@@ -1,9 +1,9 @@
 ## todo模块接口文档 ##  
 
-#### 创建待办表 /api/user/todoCreation  
+#### 创建待办表 /api/user/todoCreation
 
 **请求方式:POST**  
-**请求数据格式：x-www-form-urlencoded**  
+**请求数据格式：application/json**
 
 |请求参数|是否必选|说明|
 |-------|-------|---|
@@ -11,7 +11,7 @@
 |todoItems|是 |一个对象数组，包含所有的待办项|
 |time|是|日期|  
 
-***todoItems对象结构示例:***  
+***todoItems对象结构示例:***
 
 ```json
 {
@@ -21,7 +21,7 @@
 }
 ```  
 
-**请求成功示例**  
+**请求成功示例**
 
 ```json
 {
@@ -32,10 +32,10 @@
 }
 ```  
 
-#### 更新待办表 /api/user/todoUpdate  
+#### 更新待办表 /api/user/todoUpdate
 
 **请求方式：POST**  
-**请求数据格式：x-www-form-urlencoded**  
+**请求数据格式：application/json**
 
 |请求参数|是否必选|说明|
 |-------|-------|----|
@@ -44,7 +44,7 @@
 | todoItems | 是 | 一个对象数组，包含所有的待办项,示例如上 |
 | time | 是 | 日期 |  
 
-**请求成功示例**  
+**请求成功示例**
 
 ```json
 {
@@ -55,15 +55,15 @@
 }
 ```  
 
-#### 获取待办表 /api/user/todoList  
+#### 获取待办表 /api/user/todoList
 
-**请求方式：GET**  
+**请求方式：GET**
 
 |请求参数|是否必选|说明|
 |-------|-------|----|
 | time | 是 | 日期，格式YYYY-MM-DD |  
 
-**请求成功示例**  
+**请求成功示例**
 
 ```json
 {
@@ -190,18 +190,15 @@
 }
 ```  
 
-#### 删除待办表 /api/user/todoDeletion  
+#### 删除待办表 /api/user/todoDeletion
 
-
-**请求方式：DELETE**  
-
+**请求方式：DELETE**
 
 | 请求参数 | 是否必选 | 说明 |
 | ------- |------- | ---- |
 | todoID | 是 | 待办的id |
 
-**请求成功示例**  
-
+**请求成功示例**
 
 ```json
 {
