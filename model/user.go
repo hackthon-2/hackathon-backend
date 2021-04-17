@@ -39,3 +39,9 @@ type Watch struct {
 	WatcherID    uint   `gorm:"<-:create;type:INT UNSIGNED not NULL;index:idx_watcherId,type:btree"`
 	Watcher      string `gorm:"<-:create;collate:utf8mb4_unicode_ci;type:VARCHAR(30) not NULL;unique;index:idx_watcher,type:btree,length:30"`
 }
+type Profile struct {
+	ID       uint   `json:"id"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Avatar   string `json:"avatar"`
+}

@@ -24,6 +24,9 @@ func UpdateProfile(c *fiber.Ctx) error {
 			log.Println(err.Error())
 			return ErrorWithMessage(c, constant.CODE_402, constant.GetCodeText(constant.CODE_402))
 		}
+		if err == service.ExistedUsername {
+			return ErrorWithMessage(c, constant.CODE_202, constant.GetCodeText(constant.CODE_202))
+		}
 		log.Println(err.Error())
 		return StatusServerErrorWithMessage(c, err.Error())
 	}
