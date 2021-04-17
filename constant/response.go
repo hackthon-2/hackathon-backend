@@ -23,6 +23,10 @@ const (
 	CODE_305 ResponseCode = 305 //更新待办失败
 	CODE_306 ResponseCode = 306 //删除待办失败
 	CODE_307 ResponseCode = 307 //获取统计数据失败
+	CODE_308 ResponseCode = 308 //创建监督失败
+	CODE_309 ResponseCode = 309 //更新监督失败
+	CODE_310 ResponseCode = 310 //获取监督失败
+	CODE_311 ResponseCode = 311 //删除监督失败
 	CODE_401 ResponseCode = 401 //上传文件失败
 	CODE_402 ResponseCode = 402 //更新用户个人资料失败
 	CODE_403 ResponseCode = 403 //拉取用户个人资料失败
@@ -51,6 +55,10 @@ var codeTextMap = map[ResponseCode]string{
 	CODE_305: "更新待办失败",
 	CODE_306: "删除待办失败",
 	CODE_307: "获取统计数据失败",
+	CODE_308: "创建监督失败",
+	CODE_309: "更新监督失败",
+	CODE_310: "获取监督失败",
+	CODE_311: "删除监督失败",
 	CODE_401: "上传文件失败",
 	CODE_402: "更新用户个人资料失败",
 	CODE_403: "获取用户个人资料失败",

@@ -55,3 +55,4 @@ func FindStatisticsCache(userId uint, from string) (string, error) {
 	}
 	return data, nil
 }
+

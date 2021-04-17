@@ -12,16 +12,16 @@ import (
 
 var GenerateStatisticsError = errors.New("generating statistics error")
 
-func Statistics(userId uint, from string) (map[string]map[string]int64, error) {
+func Statistics(userId uint, from string) ([]model.Statistics, error) {
 	dat, err := database2.FindStatisticsCache(userId, from)
 	if err != nil || dat == "" {
-		var data = make(map[string]map[string]int64)
 		headers, e := database.ListHeaderFromTime(userId, from)
+		var data = make([]model.Statistics, len(headers))
 		if e != nil {
 			return nil, GenerateStatisticsError
 		}
 		//把这些header下面的待办项全部反序列化
-		for _, v := range headers {
+		for in, v := range headers {
 			val, er := database.ListItemFromTime(v, userId, from)
 			if er != nil {
 				return nil, GenerateStatisticsError
@@ -44,7 +44,9 @@ func Statistics(userId uint, from string) (map[string]map[string]int64, error) {
 				}
 			}
 			if len(items) < 1 {
-				data[v] = map[string]int64{}
+				data[in] = model.Statistics{
+					Header: v,
+				}
 				continue
 			}
 			//根据item进行排序
@@ -74,13 +76,22 @@ func Statistics(userId uint, from string) (map[string]map[string]int64, error) {
 			}
 			//所以在此处进行最后一次赋值
 			d[temp] = sum
-			data[v] = d
+			var da = make([]model.Item, len(d))
+			var s int64 = 0
+			for k, va := range d {
+				da[s].Item = k
+				da[s].Times = uint(va)
+				s++
+			}
+			data[in].Header = v
+			data[in].Items = da
 		}
 		val, _ := json.Marshal(&data)
 		err = database2.CreateStatisticsCache(userId, from, string(val))
 		return data, err
 	}
-	var data = make(map[string]map[string]int64)
+	var data []model.Statistics
 	err = json.Unmarshal([]byte(dat), &data)
 	return data, err
 }
+
