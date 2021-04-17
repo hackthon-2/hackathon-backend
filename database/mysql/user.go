@@ -12,8 +12,8 @@ func CreateUser(user *model.User) (error, int64) {
 }
 
 // FindUserById 根据用户id查找用户信息
-func FindUserById(id uint) (model.User, int64, error) {
-	var user model.User
+func FindUserById(id uint) (model.Profile, int64, error) {
+	var user model.Profile
 	result := database.DB().Table("user").Select("id","username","email","avatar").First(&user, id)
 	return user, result.RowsAffected, result.Error
 }

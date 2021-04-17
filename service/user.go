@@ -49,17 +49,21 @@ func UploadAvatar(userId uint, fileName string) error {
 	}
 	return err
 }
-func ListProfile(userId uint) (model.User, error) {
+func ListProfile(userId uint) (model.Profile, error) {
 	user, row, err := database.FindUserById(userId)
 	if err != nil {
-		return model.User{}, err
+		return model.Profile{}, err
 	}
 	if row != 1 {
-		return model.User{}, ListProfileError
+		return model.Profile{}, ListProfileError
 	}
 	return user, nil
 }
 func UpdateProfile(userId uint, input *model.UpdateUserInput) error {
+	_, rows, _ := database.FindUserByUsername(input.Username)
+	if rows != 0 {
+		return ExistedUsername
+	}
 	var user model.User
 	util.StructAssign(&user, input)
 	row, err := database.UpdateUserById(userId, &user)
