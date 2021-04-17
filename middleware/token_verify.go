@@ -34,7 +34,7 @@ func TokenVerify(c *fiber.Ctx) error {
 			if er != nil {
 				return handler.ErrorWithMessage(c, constant.CODE_102, constant.GetCodeText(constant.CODE_102))
 			}
-			token, er = j.RefreshToken(token, t)
+			token, er = j.RefreshToken(token, -t)
 			if er != nil {
 				return handler.ErrorWithMessage(c, constant.CODE_103, constant.GetCodeText(constant.CODE_103))
 			}
@@ -43,6 +43,15 @@ func TokenVerify(c *fiber.Ctx) error {
 			if er != nil {
 				return handler.ErrorWithMessage(c, constant.CODE_103, constant.GetCodeText(constant.CODE_103))
 			}
+			c.Cookie(&fiber.Cookie{
+				Name:     "token",
+				Value:    token,
+				MaxAge:   3600,
+				Path:     "/",
+				Domain:   ".onesnowwarrior.cn",
+				Secure:   true,
+				HTTPOnly: false,
+			})
 		}
 		if err == util.TokenMalformed {
 			return handler.ErrorWithMessage(c, constant.CODE_104, constant.GetCodeText(constant.CODE_104))

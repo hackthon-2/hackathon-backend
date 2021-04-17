@@ -22,10 +22,5 @@ func main() {
 	defer database.DisconnectDB()
 	defer database.DisconnectRedis()
 	log.Fatal(app.ListenTLS(":8000", "./key/1_api.onesnowwarrior.cn_bundle.crt", "./key/2_api.onesnowwarrior.cn.key"))
-	//var rawJson string = `{"header":"daskljdakslf","todoItems":[{"id":"faskjfkaf","item":"图书馆","isComplete":"false"},{"id":"faskjfkafgdas","item":"图书","isComplete":"true"},{"id":"ffsaf","item":"书","isComplete":"false"}]}`
-	//
-	//var todo Todo
-	//_=json.Unmarshal([]byte(rawJson),&todo)
-	//fmt.Println(todo)
 
 }
