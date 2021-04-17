@@ -21,12 +21,19 @@ func UpdateToDo(todoID uint, todo *model.Todo) (error, int64) {
 func FindToDoById(todoID uint) (model.Todo, int64, error) {
 	var todo model.Todo
 	result := database.DB().Table("todo").Where("id=?", todoID).First(&todo)
+	if result.RowsAffected != 1 {
+		return todo, result.RowsAffected, result.Error
+	}
+	todo.Time = todo.Time[:10]
 	return todo, result.RowsAffected, result.Error
 }
 
 func ListTodoByTime(userId uint, date string) ([]model.Todo, error) {
 	var todo []model.Todo
 	result := database.DB().Table("todo").Where("user_id=? AND time=?", userId, date).Find(&todo)
+	if result.Error != nil || result.RowsAffected < 1 {
+		return nil, result.Error
+	}
 	//把待办的日期序列化格式改成YYYY-MM-DD
 	for i, v := range todo {
 		todo[i].Time = v.Time[:10]

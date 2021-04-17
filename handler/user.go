@@ -186,6 +186,7 @@ func ListTodo(c *fiber.Ctx) error {
 			log.Println(err.Error())
 			return ErrorWithMessage(c, constant.CODE_207, constant.GetCodeText(constant.CODE_207))
 		}
+
 		return StatusServerErrorWithMessage(c, err.Error())
 	}
 	return SuccessWithMessage(c, "获取成功", data)

@@ -16,6 +16,15 @@ func CreateTodoCache(userId uint, data, date string) error {
 	}
 	return conn.Expire(ctx, "USER_TODO_"+strconv.Itoa(int(userId)), time.Hour*72).Err()
 }
+func DeleteTodoFieldCache(userId uint, date string) error {
+	conn, ctx := database.Redis()
+	defer conn.Close()
+	err := conn.HDel(ctx, "USER_TODO_"+strconv.Itoa(int(userId)), date).Err()
+	if err != nil {
+		return err
+	}
+	return conn.Expire(ctx, "USER_TODO_"+strconv.Itoa(int(userId)), time.Hour*72).Err()
+}
 
 // FindTodoCache 查找缓存
 func FindTodoCache(userId uint, date string) (string, error) {

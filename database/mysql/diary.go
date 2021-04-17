@@ -3,6 +3,7 @@ package database
 import (
 	"hackthon/database"
 	"hackthon/model"
+	"log"
 )
 
 // CreateDiary 创建日记数据
@@ -21,6 +22,10 @@ func UpdateDiary(id uint, diary *model.Diary) (error, int64) {
 func FindDiaryById(id uint) (model.Diary, int64, error) {
 	var diary model.Diary
 	result := database.DB().Table("diary").Where("id=?", id).First(&diary)
+	if result.RowsAffected != 1 {
+		return diary, result.RowsAffected, result.Error
+	}
+	diary.Time = diary.Time[:10]
 	return diary, result.RowsAffected, result.Error
 }
 
@@ -35,9 +40,10 @@ func FindDiaryByUserIDAndQuestionAndTime(userID uint, question, date string) (mo
 func ListDiaryByTime(userId uint, time string) ([]model.Diary, error) {
 	var diary []model.Diary
 	result := database.DB().Table("diary").Where("user_id=? AND time=?", userId, time).Find(&diary)
-	if result.Error != nil {
+	if result.Error != nil || result.RowsAffected < 1 {
 		return nil, result.Error
 	}
+	log.Println(len(diary), diary)
 	//把日期的序列化格式改成YYYY-MM-DD
 	for i, v := range diary {
 		diary[i].Time = v.Time[:10]

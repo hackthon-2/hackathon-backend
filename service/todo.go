@@ -130,7 +130,10 @@ func ListTodo(userID uint, date string) ([]model.TodoResponse, error) {
 		dat, e := database.ListTodoByTime(userID, date)
 		//先找到当天的todo的所有数据
 		if e != nil {
-			return nil, GetTodoListError
+			return []model.TodoResponse{}, GetTodoListError
+		}
+		if len(dat) < 1 {
+			return []model.TodoResponse{}, nil
 		}
 		var response = make([]model.TodoResponse, len(data))
 		//根据数据构造结构体，大小就是len(data)
@@ -154,7 +157,11 @@ func ListTodo(userID uint, date string) ([]model.TodoResponse, error) {
 		}
 		d, _ := json.Marshal(&response)
 		err = database2.CreateTodoCache(userID, string(d), date)
-		return response, nil
+		return response, err
+	}
+	if len(data) < 1 {
+		err = database2.DeleteTodoFieldCache(userID, date)
+		return nil, err
 	}
 	var res []model.TodoResponse
 	_ = json.Unmarshal([]byte(data), &res)
@@ -196,6 +203,9 @@ func DeleteTodo(userId, todoID uint) error {
 				(response[i].ToDoItems)[index] = item
 			}
 		}
+	}
+	if len(data) < 1 {
+		return database2.DeleteTodoFieldCache(userId, todo.Time)
 	}
 	d, _ := json.Marshal(&response)
 	return database2.CreateTodoCache(userId, string(d), todo.Time)
