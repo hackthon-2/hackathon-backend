@@ -13,6 +13,7 @@ func Init(app *fiber.App) {
 	authInit(auth)
 	user := api.Group("/user", middleware.TokenVerify)
 	userInit(user)
-	ws := api.Group("/ws", middleware.TokenVerify, middleware.WebSocketUpgrade)
+	ws := api.Group("/ws", middleware.WebSocketUpgrade)
+	ws.Use(middleware.WSTokenVerify)
 	WebsocketInit(ws)
 }

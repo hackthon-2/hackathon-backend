@@ -9,10 +9,9 @@ func WebSocketUpgrade(c *fiber.Ctx) error {
 	// IsWebSocketUpgrade returns true if the client
 	// requested upgrade to the WebSocket protocol.
 	if websocket.IsWebSocketUpgrade(c) {
-		c.Locals("allowed",true)
+		c.Locals("allowed", true)
+		c.Locals("token", c.Query("token"))
 		return c.Next()
 	}
 	return fiber.ErrUpgradeRequired
 }
-
-
