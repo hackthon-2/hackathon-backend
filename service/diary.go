@@ -13,6 +13,7 @@ var (
 	ErrorWhenCreateDiary = errors.New("when creating diary had a error")
 	ErrorWhenUpdateDiary = errors.New("when creating diary had a error")
 	GetDiaryListError    = errors.New("getting diary list failed")
+	GetDiaryFailed       = errors.New("getting diary failed")
 	DeleteDiaryError     = errors.New("can't delete diary")
 )
 
@@ -56,6 +57,17 @@ func UpdateDiary(userID, diaryID uint, input *model.DiaryInput) error {
 	}
 	err = database2.CreateDiaryCache(&data)
 	return err
+}
+
+func FindDiary(diaryID uint) (model.Diary, error) {
+	diary, row, err := database.FindDiaryById(diaryID)
+	if err != nil {
+		return model.Diary{}, err
+	}
+	if row != 1 {
+		return model.Diary{}, GetDiaryFailed
+	}
+	return diary, nil
 }
 
 // ListDiary 列出日记数据

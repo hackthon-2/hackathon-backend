@@ -6,11 +6,13 @@ import (
 	"hackthon/middleware"
 )
 
-func Init(app *fiber.App){
-	api:=app.Group("/api",logger.New())
-	api.Static("/","./static")
-	auth:=api.Group("/auth")
+func Init(app *fiber.App) {
+	api := app.Group("/api", logger.New())
+	api.Static("/", "./static")
+	auth := api.Group("/auth")
 	authInit(auth)
-	user:=api.Group("/user",middleware.TokenVerify)
+	user := api.Group("/user", middleware.TokenVerify)
 	userInit(user)
+	ws := api.Group("/ws", middleware.TokenVerify, middleware.WebSocketUpgrade)
+	WebsocketInit(ws)
 }
