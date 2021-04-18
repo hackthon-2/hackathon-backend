@@ -156,7 +156,7 @@ func ListTodo(userID uint, date string) ([]model.TodoResponse, error) {
 		if len(dat) < 1 {
 			return []model.TodoResponse{}, nil
 		}
-		var response = make([]model.TodoResponse, len(data))
+		var response = make([]model.TodoResponse, len(dat))
 		//根据数据构造结构体，大小就是len(data)
 		for i, v := range dat {
 			//遍历data,先把常项给通过反射赋值

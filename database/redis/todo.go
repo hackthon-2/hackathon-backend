@@ -9,7 +9,6 @@ import (
 // CreateTodoCache 接收序列化之后的数据进行存储
 func CreateTodoCache(userId uint, data, date string) error {
 	conn, ctx := database.Redis()
-	defer conn.Close()
 	err := conn.HSet(ctx, "USER_TODO_"+strconv.Itoa(int(userId)), date, data).Err()
 	if err != nil {
 		return err
@@ -18,7 +17,6 @@ func CreateTodoCache(userId uint, data, date string) error {
 }
 func DeleteTodoFieldCache(userId uint, date string) error {
 	conn, ctx := database.Redis()
-	defer conn.Close()
 	err := conn.HDel(ctx, "USER_TODO_"+strconv.Itoa(int(userId)), date).Err()
 	if err != nil {
 		return err
@@ -29,7 +27,6 @@ func DeleteTodoFieldCache(userId uint, date string) error {
 // FindTodoCache 查找缓存
 func FindTodoCache(userId uint, date string) (string, error) {
 	conn, ctx := database.Redis()
-	defer conn.Close()
 	data, err := conn.HGet(ctx, "USER_TODO_"+strconv.Itoa(int(userId)), date).Result()
 	if err != nil {
 		return "", err
@@ -48,7 +45,6 @@ func CreateStatisticsCache(userId uint, from, data string) error {
 // FindStatisticsCache 查找统计的缓存
 func FindStatisticsCache(userId uint, from string) (string, error) {
 	conn, ctx := database.Redis()
-	defer conn.Close()
 	data, err := conn.Get(ctx, "USER_"+strconv.Itoa(int(userId))+"_STAT_FROM_"+from).Result()
 	if err != nil {
 		return "", err

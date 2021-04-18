@@ -3,6 +3,9 @@ package router
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/websocket/v2"
+	"hackthon/handler"
+	"hackthon/service"
+	"hackthon/util"
 	"log"
 	"time"
 )
@@ -14,14 +17,14 @@ func WebsocketInit(ws fiber.Router) {
 			msg []byte
 			err error
 		)
-		ctx.Subprotocol()
+		claim := ctx.Locals("claim").(*util.Claims)
 		for {
 			if mt, msg, err = ctx.ReadMessage(); err != nil {
 				log.Println("read: ", err)
 				break
 			}
 			log.Printf("recv: %v,%s", mt, msg)
-			if err = ctx.WriteMessage(mt, msg); err != nil {
+			if err = ctx.WriteMessage(mt, []byte("Hello, "+claim.Username)); err != nil {
 				log.Println("write:", err)
 				break
 			}
@@ -31,4 +34,5 @@ func WebsocketInit(ws fiber.Router) {
 		WriteBufferSize:  1024,
 		HandshakeTimeout: 20 * time.Second,
 	}))
+	ws.Get("/chat", handler.Message(service.NewHub()))
 }

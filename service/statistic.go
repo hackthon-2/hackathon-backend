@@ -46,6 +46,7 @@ func Statistics(userId uint, from string) ([]model.Statistics, error) {
 			if len(items) < 1 {
 				data[in] = model.Statistics{
 					Header: v,
+					Items:  []model.Item{},
 				}
 				continue
 			}
@@ -94,4 +95,3 @@ func Statistics(userId uint, from string) ([]model.Statistics, error) {
 	err = json.Unmarshal([]byte(dat), &data)
 	return data, err
 }
-

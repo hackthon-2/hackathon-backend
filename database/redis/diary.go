@@ -26,7 +26,6 @@ func CreateDiaryCache(diary *[]model.Diary) error {
 		return err
 	}
 	conn, ctx := database.Redis()
-	defer conn.Close()
 	err = conn.HSet(ctx, "USER_"+strconv.Itoa(int((*diary)[0].UserID)), (*diary)[0].Time, string(val)).Err()
 	if err != nil {
 		return err
@@ -36,7 +35,6 @@ func CreateDiaryCache(diary *[]model.Diary) error {
 }
 func DeleteFieldDiaryCache(userId uint, date string) error {
 	conn, ctx := database.Redis()
-	defer conn.Close()
 	err := conn.HDel(ctx, "USER_"+strconv.Itoa(int(userId)), date).Err()
 	if err != nil {
 		return err
@@ -47,7 +45,6 @@ func DeleteFieldDiaryCache(userId uint, date string) error {
 // FindDiaryCache 查找缓存，缓存是一个hashTable,可以根据日期存缓存字段
 func FindDiaryCache(userId uint, date string) (string, error) {
 	conn, ctx := database.Redis()
-	defer conn.Close()
 	//先找缓存是否存在
 	data, err := conn.HGet(ctx, "USER_"+strconv.Itoa(int(userId)), date).Result()
 	//如果出现错误就直接返回错误
