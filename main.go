@@ -22,4 +22,5 @@ func main() {
 	defer database.DisconnectDB()
 	defer database.DisconnectRedis()
 	log.Fatal(app.ListenTLS(":8000", "./key/1_api.onesnowwarrior.cn_bundle.crt", "./key/2_api.onesnowwarrior.cn.key"))
+
 }

@@ -7,7 +7,6 @@ import (
 	database2 "hackthon/database/redis"
 	"hackthon/model"
 	"hackthon/util"
-	"log"
 )
 
 var (
@@ -31,7 +30,6 @@ func CreateDiary(userID uint, input *model.DiaryInput) error {
 	}
 	//创建了一项日记后，把今天所有的日记项全部拿出来，建立缓存&更新缓存
 	data, err := database.ListDiaryByTime(userID, input.Time)
-	log.Println(data)
 	if err != nil {
 		return err
 	}
@@ -67,7 +65,10 @@ func ListDiary(userID uint, date string) ([]model.Diary, error) {
 		//没找到缓存就到数据库拿
 		dat, e := database.ListDiaryByTime(userID, date)
 		if e != nil {
-			return nil, GetDiaryListError
+			return []model.Diary{}, GetDiaryListError
+		}
+		if len(dat) < 1 {
+			return []model.Diary{}, nil
 		}
 		e = database2.CreateDiaryCache(&dat)
 		//创建缓存失败直接返回错误
@@ -75,6 +76,9 @@ func ListDiary(userID uint, date string) ([]model.Diary, error) {
 			return nil, e
 		}
 		return dat, nil
+	}
+	if data == "" {
+		return []model.Diary{}, nil
 	}
 	var diary []model.Diary
 	//把提取到的缓存字符串（json格式)反序列化成切片
@@ -101,6 +105,9 @@ func DeleteDiary(userID, diaryID uint) error {
 	data, err := database.ListDiaryByTime(userID, diary.Time)
 	if err != nil {
 		return err
+	}
+	if len(data) < 1 {
+		return database2.DeleteFieldDiaryCache(userID, diary.Time)
 	}
 	//建立更新后的缓存
 	return database2.CreateDiaryCache(&data)
