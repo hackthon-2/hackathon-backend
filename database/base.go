@@ -86,6 +86,8 @@ func ConnectRedis() {
 		Addr:        "localhost:6379",
 		Password:    passwd,
 		DB:          0,
+		IdleTimeout: -1,
+		MinIdleConns: 100,
 		DialTimeout: time.Second * 5,
 		PoolSize:    200,
 	})

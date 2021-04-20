@@ -17,10 +17,11 @@ func main() {
 	})
 	database.ConnectDB()
 	database.ConnectRedis()
+	//middleware.ConnectMQ()
 	app.Use(cors.New(), recover.New())
 	router.Init(app)
 	defer database.DisconnectDB()
 	defer database.DisconnectRedis()
-	log.Fatal(app.ListenTLS(":8000", "./key/1_api.onesnowwarrior.cn_bundle.crt", "./key/2_api.onesnowwarrior.cn.key"))
-
+	log.Fatal(app.Listen(":8000"))
+	//log.Fatal(app.ListenTLS(":8000", "./key/1_api.onesnowwarrior.cn_bundle.crt", "./key/2_api.onesnowwarrior.cn.key"))
 }

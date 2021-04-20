@@ -14,6 +14,7 @@ var (
 	CreateTodoError  = errors.New("creating todo error")
 	UpdateTodoError  = errors.New("updating todo error")
 	GetTodoListError = errors.New("getting todo error")
+	GetTodoError     = errors.New("getting todo error")
 	DeleteTodoError  = errors.New("deleting todo error")
 )
 
@@ -123,7 +124,27 @@ func UpdateTodo(userId, todoId uint, input *model.TodoInput) error {
 	err = database2.CreateTodoCache(userId, string(dat), input.Time)
 	return err
 }
-
+func FindTodo(todoId uint) (model.TodoResponse, error) {
+	todo, row, err := database.FindToDoById(todoId)
+	if err != nil {
+		return model.TodoResponse{}, err
+	}
+	if row != 1 {
+		return model.TodoResponse{}, GetTodoListError
+	}
+	data := strings.Split(todo.TodoItem, "/")
+	var items = make([]model.ToDoItem, len(data))
+	for i, v := range data {
+		err = json.Unmarshal([]byte(v), &items[i])
+		if err != nil {
+			return model.TodoResponse{}, err
+		}
+	}
+	var todoItem model.TodoResponse
+	util.StructAssign(&todoItem, &todo)
+	todoItem.ToDoItems = items
+	return todoItem, nil
+}
 func ListTodo(userID uint, date string) ([]model.TodoResponse, error) {
 	data, err := database2.FindTodoCache(userID, date)
 	if err != nil || data == "" {
@@ -135,7 +156,7 @@ func ListTodo(userID uint, date string) ([]model.TodoResponse, error) {
 		if len(dat) < 1 {
 			return []model.TodoResponse{}, nil
 		}
-		var response = make([]model.TodoResponse, len(data))
+		var response = make([]model.TodoResponse, len(dat))
 		//根据数据构造结构体，大小就是len(data)
 		for i, v := range dat {
 			//遍历data,先把常项给通过反射赋值

@@ -30,7 +30,6 @@ func CreateTokenCache(username, token string) error {
 		}
 	}
 	err = conn.Set(ctx, username, token, time.Hour*4).Err()
-	defer conn.Close()
 	return err
 }
 
@@ -40,7 +39,6 @@ func FindTokenCache(token string, time time.Duration) (time.Duration, error) {
 		return 0, NotFounded
 	}
 	ttl := conn.TTL(ctx, token).Val()
-	defer conn.Close()
 	return time - ttl, nil
 
 }

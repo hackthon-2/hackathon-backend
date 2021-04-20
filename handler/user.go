@@ -93,6 +93,27 @@ func UpdateDiary(c *fiber.Ctx) error {
 	}
 	return SuccessWithMessage(c, "请求成功", [0]int{})
 }
+func FindDiary(c *fiber.Ctx) error {
+	diaryIDVal, err := strconv.Atoi(c.Query("diaryID"))
+	if err != nil {
+		log.Println(err.Error())
+		return ErrorWithMessage(c, constant.CODE_100, constant.GetCodeText(constant.CODE_100))
+	}
+	if diaryIDVal < 1 {
+		log.Println("diary id out of range")
+		return ErrorWithMessage(c, constant.CODE_100, constant.GetCodeText(constant.CODE_100))
+	}
+	data, err := service.FindDiary(uint(diaryIDVal))
+	if err != nil {
+		if err == service.GetDiaryFailed {
+			log.Println(err.Error())
+			return ErrorWithMessage(c, constant.CODE_207, constant.GetCodeText(constant.CODE_207))
+		}
+		log.Println(err.Error())
+		return StatusServerErrorWithMessage(c, err.Error())
+	}
+	return SuccessWithMessage(c, "获取成功", data)
+}
 
 // ListDiary GET方式
 func ListDiary(c *fiber.Ctx) error {
@@ -179,7 +200,27 @@ func UpdateTodo(c *fiber.Ctx) error {
 	}
 	return SuccessWithMessage(c, "请求成功", [0]int{})
 }
-
+func FindTodo(c *fiber.Ctx) error {
+	todoIdVal := c.Query("todoID")
+	id, err := strconv.Atoi(todoIdVal)
+	if err != nil {
+		return ErrorWithMessage(c, constant.CODE_100, constant.GetCodeText(constant.CODE_100))
+	}
+	if id < 1 {
+		log.Println("todo id out of range")
+		return ErrorWithMessage(c, constant.CODE_100, constant.GetCodeText(constant.CODE_100))
+	}
+	data, err := service.FindTodo(uint(id))
+	if err != nil {
+		if err == service.GetTodoListError {
+			log.Println(err.Error())
+			return ErrorWithMessage(c, constant.CODE_207, constant.GetCodeText(constant.CODE_207))
+		}
+		log.Println(err.Error())
+		return StatusServerErrorWithMessage(c, err.Error())
+	}
+	return SuccessWithMessage(c, "获取成功", data)
+}
 func ListTodo(c *fiber.Ctx) error {
 	claim := c.Locals("claim").(*util.Claims)
 	time := c.Query("time", time2.Now().Format("2006-01-02"))
@@ -189,7 +230,6 @@ func ListTodo(c *fiber.Ctx) error {
 			log.Println(err.Error())
 			return ErrorWithMessage(c, constant.CODE_207, constant.GetCodeText(constant.CODE_207))
 		}
-
 		return StatusServerErrorWithMessage(c, err.Error())
 	}
 	return SuccessWithMessage(c, "获取成功", data)

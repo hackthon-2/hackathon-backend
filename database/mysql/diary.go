@@ -3,7 +3,6 @@ package database
 import (
 	"hackthon/database"
 	"hackthon/model"
-	"log"
 )
 
 // CreateDiary 创建日记数据
@@ -43,7 +42,6 @@ func ListDiaryByTime(userId uint, time string) ([]model.Diary, error) {
 	if result.Error != nil || result.RowsAffected < 1 {
 		return nil, result.Error
 	}
-	log.Println(len(diary), diary)
 	//把日期的序列化格式改成YYYY-MM-DD
 	for i, v := range diary {
 		diary[i].Time = v.Time[:10]

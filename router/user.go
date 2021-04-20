@@ -14,11 +14,13 @@ func userInit(user fiber.Router) {
 	user.Post("/diaryCreation", handler.CreateDiary)
 	user.Post("/diaryUpdate", handler.UpdateDiary)
 	user.Get("/diaryList", handler.ListDiary)
+	user.Get("/diary", handler.FindDiary)
 	user.Delete("/diaryDeletion", handler.DeleteDiary)
 	//待办模块
 	user.Post("/todoCreation", handler.CreateTodo)
 	user.Post("/todoUpdate", handler.UpdateTodo)
 	user.Get("/todoList", handler.ListTodo)
+	user.Get("/todo", handler.FindTodo)
 	user.Delete("/todoDeletion", handler.DeleteTodo)
 	//统计模块
 	user.Get("/statistics", handler.Statistics)
