@@ -18,7 +18,7 @@ func Message(hub *service.Hub) fiber.Handler {
 		}
 		client.Hub.Register <- client
 		go client.WritePump()
-		go client.ReadPump()
+		client.ReadPump()
 	}, websocket.Config{
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,

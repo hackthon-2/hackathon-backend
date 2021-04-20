@@ -52,12 +52,13 @@ type Hub struct {
 
 func NewHub() *Hub {
 	return &Hub{
-		Broadcast: make(chan []byte),
-		Register:  make(chan *Client),
-		Clients:   make(map[*Client]bool),
+		Broadcast:  make(chan []byte),
+		Register:   make(chan *Client),
+		Unregister: make(chan *Client),
+		Clients:    make(map[*Client]bool),
 	}
 }
-func (h *Hub) run() {
+func (h *Hub) Run() {
 	for {
 		select {
 		case client := <-h.Register:
@@ -82,7 +83,7 @@ func (h *Hub) run() {
 	}
 }
 
-//读取服务端发送的信息
+// ReadPump 读取客户端发送的信息
 func (c *Client) ReadPump() {
 	defer func() {
 		c.Hub.Unregister <- c
@@ -104,11 +105,12 @@ func (c *Client) ReadPump() {
 		}
 		//把用户输入的回车替换成空格，然后把其他的不在字符串之间的转义符全部删除
 		message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
+		message = []byte(c.Username + ":" + string(message))
 		c.Hub.Broadcast <- message
 	}
 }
 
-//服务端发送给客户端的信息
+// WritePump 服务端发送给客户端的信息
 func (c *Client) WritePump() {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
@@ -124,7 +126,6 @@ func (c *Client) WritePump() {
 				c.Conn.WriteMessage(websocket.CloseMessage, []byte{})
 				return
 			}
-
 			w, err := c.Conn.NextWriter(websocket.TextMessage)
 			if err != nil {
 				return
@@ -137,15 +138,15 @@ func (c *Client) WritePump() {
 				w.Write(<-c.Send)
 			}
 
-			if err=w.Close();err!=nil{
+			if err = w.Close(); err != nil {
 				return
 			}
 		case <-ticker.C:
 			c.Conn.SetWriteDeadline(time.Now().Add(writeWait))
-			if err:=c.Conn.WriteMessage(websocket.PingMessage,nil);err!=nil{
+			if err := c.Conn.WriteMessage(websocket.PingMessage, nil); err != nil {
 				return
 			}
-			
+
 		}
 	}
 }

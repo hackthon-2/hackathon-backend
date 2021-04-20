@@ -10,6 +10,8 @@ import (
 	"time"
 )
 
+var hub *service.Hub
+
 func WebsocketInit(ws fiber.Router) {
 	ws.Get("/message", websocket.New(func(ctx *websocket.Conn) {
 		var (
@@ -34,5 +36,7 @@ func WebsocketInit(ws fiber.Router) {
 		WriteBufferSize:  1024,
 		HandshakeTimeout: 20 * time.Second,
 	}))
-	ws.Get("/chat", handler.Message(service.NewHub()))
+	hub = service.NewHub()
+	go hub.Run()
+	ws.Get("/chat", handler.Message(hub))
 }
